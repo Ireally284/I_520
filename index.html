@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f7efe6">
+  <title>Our Little Time Capsule</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="wrap">
+    <p class="hearts" aria-hidden="true"><span>♡</span><span>♡</span><span>♡</span></p>
+
+    <h1>Our Little Time Capsule</h1>
+    <p class="subtitle">A letter from the past, waiting for our future.</p>
+
+    <section class="envelope-stage">
+      <div class="envelope" id="envelope">
+        <span class="flap"></span>
+        <span class="paper"><span class="paper-inner" id="letter-preview"></span></span>
+        <span class="seal" aria-hidden="true">🔒</span>
+      </div>
+    </section>
+
+    <section class="countdown">
+      <p class="sealed-note">Your letter is sealed.</p>
+      <p class="unlock-date">Our Second Anniversary · 25 November 2027, 00:00 (UK)</p>
+      <div class="timer" role="timer" aria-label="Time until the anniversary">
+        <div><span id="d">--</span><small>Days</small></div>
+        <div><span id="h">--</span><small>Hours</small></div>
+        <div><span id="m">--</span><small>Minutes</small></div>
+        <div><span id="s">--</span><small>Seconds</small></div>
+      </div>
+      <p class="quote">"See you in one year, my love."</p>
+    </section>
+
+    <section class="unlock-form" id="unlock-form">
+      <p class="hint">Enter the passphrase to open your letter.</p>
+      <form id="form" autocomplete="off">
+        <input id="pw" type="password" placeholder="Passphrase" aria-label="Passphrase" required>
+        <button type="submit" id="submit">Open</button>
+      </form>
+      <p class="error" id="error" hidden>That passphrase is not right. Please try again.</p>
+    </section>
+
+    <article class="letter-view" id="letter-view" hidden>
+      <div class="letter-text" id="letter-text"></div>
+    </article>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
