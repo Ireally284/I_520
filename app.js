@@ -15,6 +15,16 @@ function renderCountdown() {
 renderCountdown();
 setInterval(renderCountdown, 1000);
 
+// Before the day, hide the passphrase box. This is a display gate only;
+// the letter still needs the passphrase, which is never in this file.
+function applyDateGate() {
+  const open = Date.now() >= UNLOCK_MS;
+  $("unlock-form").hidden = !open;
+  $("locked-note").hidden = open;
+}
+applyDateGate();
+setInterval(applyDateGate, 15000);
+
 let blob = null;
 fetch("letter.enc.json", { cache: "no-store" })
   .then((r) => r.json())
