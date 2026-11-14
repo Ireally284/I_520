@@ -38,8 +38,10 @@
       <p class="quote">"Sealed with a kiss, and a little too much love."</p>
     </section>
 
-    <section class="unlock-form" id="unlock-form">
-      <p class="hint">Type the date to break the seal. 💌</p>
+    <p class="locked-note" id="locked-note" hidden>🔒 Locked until 25 November 2027, 00:00 (UK)</p>
+
+    <section class="unlock-form" id="unlock-form" hidden>
+      <p class="hint">Today is...</p>
       <form id="form" autocomplete="off">
         <input id="pw" type="text" placeholder="date/month/year" aria-label="date/month/year" autocapitalize="off" autocorrect="off" required>
         <button type="submit" id="submit">Open</button>
