@@ -1,4 +1,4 @@
-import { decryptLetter, decryptBytes } from "./crypto.js";
+﻿import { decryptLetter, decryptBytes } from "./crypto.js";
 
 const UNLOCK_MS = Date.parse("2027-11-25T00:00:00Z");
 const $ = (id) => document.getElementById(id);
@@ -44,6 +44,20 @@ async function loadPhoto(pass) {
   }
 }
 
+
+// Video is encrypted with the same passphrase; shown only after the letter opens.
+async function loadVideo(pass) {
+  try {
+    const r = await fetch("video/video.enc.json", { cache: "no-store" });
+    const { bytes, mime } = await decryptBytes(await r.json(), pass);
+    const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
+    $("video-el").src = url;
+    $("video-view").hidden = false;
+  } catch {
+    // Video is optional; the letter still shows if this fails.
+  }
+}
+
 $("form").addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!blob) return;
@@ -56,6 +70,7 @@ $("form").addEventListener("submit", async (e) => {
     $("error").hidden = true;
     $("letter-view").hidden = false;
     loadPhoto($("pw").value);
+    loadVideo($("pw").value);
     $("letter-view").scrollIntoView({ behavior: "smooth", block: "start" });
   } catch {
     $("error").hidden = false;
