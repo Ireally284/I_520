@@ -18,7 +18,7 @@ setInterval(renderCountdown, 1000);
 // Before the day, hide the passphrase box. This is a display gate only;
 // the letter still needs the passphrase, which is never in this file.
 function applyDateGate() {
-  const open = true; // TEST COPY ONLY
+  const open = Date.now() >= UNLOCK_MS;
   $("unlock-form").hidden = !open;
   $("locked-note").hidden = open;
 }
