@@ -57,3 +57,32 @@ export async function decryptLetter(blob, password) {
   );
   return dec.decode(pt);
 }
+
+// Same scheme for binary data such as photos. Returns a blob with a mime type.
+export async function encryptBytes(bytes, password, mime, iterations = ITER) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await deriveKey(password, salt, iterations);
+  const ct = new Uint8Array(
+    await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, bytes)
+  );
+  return {
+    v: 1,
+    kdf: "PBKDF2-SHA256",
+    iter: iterations,
+    mime,
+    salt: bytesToB64(salt),
+    iv: bytesToB64(iv),
+    ct: bytesToB64(ct),
+  };
+}
+
+export async function decryptBytes(blob, password) {
+  const key = await deriveKey(password, b64ToBytes(blob.salt), blob.iter);
+  const pt = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: b64ToBytes(blob.iv) },
+    key,
+    b64ToBytes(blob.ct)
+  );
+  return { bytes: new Uint8Array(pt), mime: blob.mime || "image/jpeg" };
+}

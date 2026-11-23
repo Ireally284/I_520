@@ -1,4 +1,4 @@
-import { decryptLetter } from "./crypto.js";
+import { decryptLetter, decryptBytes } from "./crypto.js";
 
 const UNLOCK_MS = Date.parse("2027-11-25T00:00:00Z");
 const $ = (id) => document.getElementById(id);
@@ -31,6 +31,19 @@ fetch("letter.enc.json", { cache: "no-store" })
   .then((b) => { blob = b; })
   .catch(() => { $("error").textContent = "Could not load the letter. Please refresh."; $("error").hidden = false; });
 
+// Photos are encrypted with the same passphrase; shown only after the letter opens.
+async function loadPhoto(pass) {
+  try {
+    const r = await fetch("photos/halloween.enc.json", { cache: "no-store" });
+    const { bytes, mime } = await decryptBytes(await r.json(), pass);
+    const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
+    $("photo-img").src = url;
+    $("photo-view").hidden = false;
+  } catch {
+    // Photo is optional; the letter still shows if this fails.
+  }
+}
+
 $("form").addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!blob) return;
@@ -42,6 +55,7 @@ $("form").addEventListener("submit", async (e) => {
     $("unlock-form").hidden = true;
     $("error").hidden = true;
     $("letter-view").hidden = false;
+    loadPhoto($("pw").value);
     $("letter-view").scrollIntoView({ behavior: "smooth", block: "start" });
   } catch {
     $("error").hidden = false;
